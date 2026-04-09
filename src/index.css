@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Outfit:wght@300;400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Newsreader", serif;
+  --font-ui: "Outfit", sans-serif;
+  
+  --color-primary: var(--primary);
+  --color-background-light: var(--background);
+  --color-background-dark: #211111;
+  --color-surface: var(--surface);
+  --color-text-main: var(--text-main);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+
+  --radius-DEFAULT: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  
+  --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.06);
+  --shadow-soft-hover: 0 16px 50px rgba(0, 0, 0, 0.1);
+}
+
+:root {
+  --primary: #E8A5A5;
+  --background: #FDFBF7;
+  --surface: #FFFFFF;
+  --text-main: #4A4443;
+  --muted: #BDB5B3;
+  --accent: #D8C3B5;
+}
+
+.dark {
+  --primary: #E8A5A5;
+  --background: #1A1A1A;
+  --surface: #262626;
+  --text-main: #E5E5E5;
+  --muted: #737373;
+  --accent: #404040;
+}
+
+@layer base {
+  body {
+    @apply bg-background-light text-text-main font-ui antialiased transition-colors duration-300;
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

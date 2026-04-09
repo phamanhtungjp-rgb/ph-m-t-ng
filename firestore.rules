@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    function isNovelAuthor(novelId) {
+      return isAuthenticated() && get(/databases/$(database)/documents/novels/$(novelId)).data.authorId == request.auth.uid;
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+      
+      match /bookshelf/{novelId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      match /profile/stats {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    match /novels/{novelId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated() && resource.data.authorId == request.auth.uid;
+
+      match /chapters/{chapterId} {
+        allow read: if true;
+        allow create, update, delete: if isNovelAuthor(novelId);
+      }
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if isAuthenticated();
+        allow update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      }
+      
+      match /reviews/{reviewId} {
+        allow read: if true;
+        allow create: if isAuthenticated();
+        allow update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      }
+    }
+  }
+}
